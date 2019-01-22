@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using MiniJSON;
+using System.Runtime.InteropServices; //WebGL jsからcsを呼び出す
 
 public class ChangeColorName : MonoBehaviour{
 
@@ -13,7 +14,19 @@ public class ChangeColorName : MonoBehaviour{
 	private Color colors;
 	private int custom;
 
+	[DllImport("__Internal")]
+	static extern Inptr Fuga();
+
+	[DllImport("__Internal")]
+	static extern Inptr Init(Action<string, int> piyo);
+
+	[MonoPInvokeCallback(typeof(Action<string, int>))]
+	static void Piyo(string str, int n){
+		Debug.Log("called Piyo:'" + str + "'," + n);
+	} 
+
 	void Start(){
+		Fuga();
 	}
 
 	//髪色変更
